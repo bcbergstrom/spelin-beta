@@ -21,5 +21,6 @@ namespace api.Models
         //Relationships
         public List<UserGame> UserGames { get; set; } = [];
         public List<Game> Games { get; set; } = [];
+        public Review Review { get; set; } = null!; 
     }
 }
