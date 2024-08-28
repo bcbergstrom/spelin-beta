@@ -14,6 +14,5 @@ namespace api.Dtos.User
 
         public string Password { get; set; } = string.Empty;
 
-        public List<GameDTO>? Games { get; set; }
     }
 }
