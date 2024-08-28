@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -10,9 +11,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827170215_added id's to backend")]
+    partial class addedidstobackend
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,6 +58,9 @@ namespace api.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Games");
@@ -82,21 +88,6 @@ namespace api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("api.Models.UserGame", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "GameId");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("UserGames");
-                });
-
             modelBuilder.Entity("GameUser", b =>
                 {
                     b.HasOne("api.Models.Game", null)
@@ -110,35 +101,6 @@ namespace api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("api.Models.UserGame", b =>
-                {
-                    b.HasOne("api.Models.Game", "Game")
-                        .WithMany("UserGames")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.User", "User")
-                        .WithMany("UserGames")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("api.Models.Game", b =>
-                {
-                    b.Navigation("UserGames");
-                });
-
-            modelBuilder.Entity("api.Models.User", b =>
-                {
-                    b.Navigation("UserGames");
                 });
 #pragma warning restore 612, 618
         }

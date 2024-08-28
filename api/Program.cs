@@ -1,4 +1,8 @@
 using api.Data;
+using api.Interfaces;
+using api.Models;
+using api.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +27,13 @@ else
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connection));
 
+
+// Injections
+builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserGameRepository, UserGameRepository>();
+builder.Services.AddControllers()
+.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

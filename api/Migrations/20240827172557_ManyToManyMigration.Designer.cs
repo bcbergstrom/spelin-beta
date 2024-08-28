@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -10,9 +11,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827172557_ManyToManyMigration")]
+    partial class ManyToManyMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,21 +23,6 @@ namespace api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GameUser", b =>
-                {
-                    b.Property<int>("GamesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GamesId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("GameUser");
-                });
 
             modelBuilder.Entity("api.Models.Game", b =>
                 {
@@ -84,32 +72,17 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.UserGame", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "GameId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("GameId");
+                    b.HasKey("GameId", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserGames");
-                });
-
-            modelBuilder.Entity("GameUser", b =>
-                {
-                    b.HasOne("api.Models.Game", null)
-                        .WithMany()
-                        .HasForeignKey("GamesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("api.Models.UserGame", b =>

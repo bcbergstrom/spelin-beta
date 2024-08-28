@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Game;
+using api.Dtos.User;
 using api.Models;
 
 namespace api.Mappers
@@ -16,7 +17,8 @@ namespace api.Mappers
                 Name = game.Name,
                 Description = game.Description,
                 Price = game.Price
-            };
+                            
+                            };
         }
         public static Game ToGameFromCreateDTO(this CreateGameRequestDTO gameDTO)
         {
@@ -25,7 +27,15 @@ namespace api.Mappers
                 Name = gameDTO.Name,
                 Description = gameDTO.Description,
                 Price = gameDTO.Price
-
+            };
+        }
+        public static Game ToGameFromUpdateDTO(this UpdateGameRequestDTO gameDTO)
+        {
+            return new Game
+            {
+                Name = gameDTO.Name,
+                Description = gameDTO.Description,
+                Price = gameDTO.Price
             };
         }
     }

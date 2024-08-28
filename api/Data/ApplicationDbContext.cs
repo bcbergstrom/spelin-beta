@@ -16,6 +16,22 @@ namespace api.Data
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<User_Game> Users_Games { get; set; }
+        public DbSet<UserGame> UserGames { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserGame>()
+            .HasKey(x => new {x.UserId, x.GameId});
+
+            modelBuilder.Entity<UserGame>()
+            .HasOne(x => x.User)
+            .WithMany(y => y.UserGames)
+            .HasForeignKey(z => z.UserId);
+
+            modelBuilder.Entity<UserGame>()
+            .HasOne(x => x.Game)
+            .WithMany(y => y.UserGames)
+            .HasForeignKey(z => z.GameId);
+        }
     }
 }
