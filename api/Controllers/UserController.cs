@@ -19,8 +19,6 @@ namespace api.Controllers
     {
         private readonly IGameRepository _gameRepo;
         private readonly IUserRepository _userRepo;
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         public UserController(IUserRepository userRepo, IGameRepository gameRepo)
         {
             _userRepo = userRepo;

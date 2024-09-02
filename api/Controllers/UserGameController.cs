@@ -34,5 +34,34 @@ namespace api.Controllers
             var userGames = await _userGameRepo.GetUserGames(appUser);
             return Ok(userGames);
         }
+        [HttpPost("{userId}/{gameId}")]
+        public async Task<IActionResult> Create([FromRoute] int userId, [FromRoute]int gameId)
+        {
+            var user = await _userRepo.GetByIdAsync(userId);
+            var games = await _gameRepo.GetByIdAsync(gameId);
+
+            if (user == null || games == null)
+            {
+                return NotFound();
+            }
+            var UserGameIsFilled = await _userGameRepo.GetUserGames(user);
+            if(UserGameIsFilled.Any(e => e.Id == gameId))
+            {
+                return BadRequest("Cannot add same game twice");
+            }
+
+            var usergameModel = new UserGame
+            {
+                UserId = user.Id,
+                GameId = games.Id
+            };
+            await _userGameRepo.CreateAsync(usergameModel);
+            if (usergameModel == null)
+            {
+                return StatusCode(500, "Couldn't create UserGame");
+            }else {
+                return Created();
+            }
+        }
     }
 }

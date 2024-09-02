@@ -16,8 +16,7 @@ namespace api.Mappers
                 Id = game.Id,
                 Name = game.Name,
                 Description = game.Description,
-                Price = game.Price
-                            
+                Price = game.Price    
                             };
         }
         public static Game ToGameFromCreateDTO(this CreateGameRequestDTO gameDTO)

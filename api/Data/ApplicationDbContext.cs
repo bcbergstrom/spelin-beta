@@ -17,9 +17,14 @@ namespace api.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<UserGame> UserGames { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<GameGenre> GameGenres { get; set; }
+        public DbSet<GameReview> GameReviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<UserGame>()
             .HasKey(x => new {x.UserId, x.GameId});
 
@@ -63,7 +68,7 @@ namespace api.Data
             .HasOne(x => x.Review)
             .WithMany(y => y.GameReviews)
             .HasForeignKey(z => z.ReviewId);
-            
+
 
             }
     }

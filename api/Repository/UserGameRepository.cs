@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.Game;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -24,19 +25,18 @@ namespace api.Repository
             return userGame;
         }
 
-        public async Task<List<Game>> GetUserGames(User user)
+        public async Task<List<GameDTO>> GetUserGames(User user)
         {
-            if (user == null) return await Task.FromResult(new List<Game>());
+            if (user == null) return  new List<GameDTO>();
 
 
             return await _context.UserGames.Where(u => u.UserId == user.Id)
-            .Select(game => new Game{
+            .Select(game => new GameDTO
+            {
                 Id = game.GameId,
                 Name = game.Game.Name,
                 Description = game.Game.Description,
-                Price = game.Game.Price
-
-            }).ToListAsync();
+                Price = game.Game.Price}).ToListAsync();
         }
     }
 }
