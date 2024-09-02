@@ -27,6 +27,9 @@ else
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connection));
 
+builder.Services.AddAuthentication();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Injections
 builder.Services.AddScoped<IGameRepository, GameRepository>();
@@ -43,6 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapIdentityApi<IdentityUser>();
 app.UseHttpsRedirection();
 
 app.MapControllers();

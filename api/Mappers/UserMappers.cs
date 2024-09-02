@@ -36,5 +36,14 @@ namespace api.Mappers
                 Password = userDTO.Password
             };
         }
+
+        public static LoginDTO ToLoginDTOFromUserDTO(this UserDTO user){
+            return new LoginDTO
+            {
+                Name = user.Name ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                Password = user.Password ?? string.Empty
+            };
+        }
     }
 }

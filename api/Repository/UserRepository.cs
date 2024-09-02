@@ -49,6 +49,11 @@ namespace api.Repository
             return await _context.Users.Include(x => x.Games).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public Task<User?> LoginAsync(LoginDTO login)
+        {
+            return _context.Users.FirstOrDefaultAsync<User>(x => x.Email == login.Email && x.Password == login.Password);
+        }
+
         public async Task<User?> UpdateAsync(int id, UpdateUserRequestDTO user)
         {
             var userToUpdate = _context.Users.Include(x => x.Games).FirstOrDefault(x => x.Id == id);

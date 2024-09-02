@@ -27,15 +27,16 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserGames([FromRoute] int id)
+        [Authorize]
+        public async Task<IActionResult> GetUserByGame([FromRoute] int id)
         {
             //Setup user Auth;
             var appUser = await _userRepo.GetByIdAsync(id);
             var userGames = await _userGameRepo.GetUserGames(appUser);
             return Ok(userGames);
         }
-        [HttpPost("{userId}/{gameId}")]
-        public async Task<IActionResult> Create([FromRoute] int userId, [FromRoute]int gameId)
+        [HttpPost("{gameId}")]
+        public async Task<IActionResult> Create([FromBody] int userId, int gameId)
         {
             var user = await _userRepo.GetByIdAsync(userId);
             var games = await _gameRepo.GetByIdAsync(gameId);

@@ -24,6 +24,7 @@ namespace api.Controllers
             _userRepo = userRepo;
             _gameRepo = gameRepo;
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -45,11 +46,24 @@ namespace api.Controllers
             return Ok(user.ToUserDTO());
         }
         [HttpPost]
+        [Route("register")]
         public async Task<IActionResult> Create([FromBody] CreateUserRequestDTO userDTO)
         {
             var userModel = userDTO.ToUserFromCreateDTO();
             await _userRepo.CreateAsync(userModel);
             return CreatedAtAction(nameof(GetById), new { id = userModel.Id }, userModel.ToUserDTO());
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
+        {
+            var user = await _userRepo.LoginAsync(userDTO.ToLoginDTOFromUserDTO());
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user.ToUserDTO());
         }
         
 
