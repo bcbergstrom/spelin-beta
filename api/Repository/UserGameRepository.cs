@@ -30,7 +30,7 @@ namespace api.Repository
             if (user == null) return  new List<GameDTO>();
 
 
-            return await _context.UserGames.Where(u => u.UserId == user.Id)
+            return await _context.UserGames.Where(u => (u.UserId) == Convert.ToInt32(user.Id))
             .Select(game => new GameDTO
             {
                 Id = game.GameId,

@@ -7,7 +7,10 @@ using api.Dtos.User;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Azure;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,11 +22,17 @@ namespace api.Controllers
     {
         private readonly IGameRepository _gameRepo;
         private readonly IUserRepository _userRepo;
-        public UserController(IUserRepository userRepo, IGameRepository gameRepo)
+
+        private readonly UserManager<User> _userManager; 
+        private readonly SignInManager<User> _signInManager;
+        public UserController(IUserRepository userRepo, IGameRepository gameRepo, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userRepo = userRepo;
             _gameRepo = gameRepo;
-        }
+            _userManager = userManager;
+            _signInManager = signInManager;
+
+        } 
         
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -47,37 +56,39 @@ namespace api.Controllers
         }
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Create([FromBody] CreateUserRequestDTO userDTO)
+        public async Task<IActionResult> Create([FromBody] LoginDTO userDTO)
         {
-            var userModel = userDTO.ToUserFromCreateDTO();
-            await _userRepo.CreateAsync(userModel);
-            return CreatedAtAction(nameof(GetById), new { id = userModel.Id }, userModel.ToUserDTO());
+            if (ModelState.IsValid)
+            {
+                var user = new User {UserName = userDTO.Name, Email = userDTO.Email};
+                var result = await _userManager.CreateAsync(user, userDTO.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return Ok();
+                }
+            }
+
+            return NotFound();
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
+        public async Task<IActionResult> Login([FromBody] LoginDTO userDTO)
         {
-            var user = await _userRepo.LoginAsync(userDTO.ToLoginDTOFromUserDTO());
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user.ToUserDTO());
+        var result = await _signInManager.PasswordSignInAsync(userDTO.Email, userDTO.Password, false, false);        
+
+        if (result.Succeeded)
+        {
+            return Ok();
         }
+        else
+        {
+            return NotFound();
+        }
+    }
         
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateUserRequestDTO userDTO)
-        {
-            var user = await _userRepo.UpdateAsync(id, userDTO);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user.ToUserDTO());
-        }
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)

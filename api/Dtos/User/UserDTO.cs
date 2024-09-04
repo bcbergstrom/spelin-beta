@@ -16,5 +16,10 @@ namespace api.Dtos.User
         public string Email { get; set; } = string.Empty;
 
         public string Password { get; set; } = string.Empty;
+
+        internal static LoginDTO ToLoginDTO(UserDTO userDTO)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

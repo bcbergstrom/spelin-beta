@@ -14,6 +14,7 @@ namespace api.Controllers
 
     [Route("api/usergame")]
     [ApiController]
+    [Authorize]
     public class UserGameController : ControllerBase
     {
         private readonly IUserRepository _userRepo;
@@ -35,7 +36,9 @@ namespace api.Controllers
             var userGames = await _userGameRepo.GetUserGames(appUser);
             return Ok(userGames);
         }
+    
         [HttpPost("{gameId}")]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] int userId, int gameId)
         {
             var user = await _userRepo.GetByIdAsync(userId);
@@ -53,7 +56,7 @@ namespace api.Controllers
 
             var usergameModel = new UserGame
             {
-                UserId = user.Id,
+                UserId =  Convert.ToInt32(user.Id),
                 GameId = games.Id
             };
             await _userGameRepo.CreateAsync(usergameModel);
