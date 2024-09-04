@@ -10,6 +10,7 @@ namespace api.Interfaces
     {
         Task<Genre?> GetByIdAync(int id);
         Task<Genre> DeleteAsync(int id);
+        Task<Genre> CreateAsync(Genre genre);
 
     }
 }

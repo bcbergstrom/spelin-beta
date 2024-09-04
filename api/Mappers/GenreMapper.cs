@@ -13,9 +13,17 @@ namespace api.Mappers
         {
             return new GenreDTO
             {
-                Id = genre.Id,
                 Name = genre.Name,
                 Description = genre.Description
+            };
+        }
+
+        public static Genre ToGenreFromCreateDTO(this GenreDTO genreDTO)
+        {
+            return new Genre
+            {
+                Name = genreDTO.Name,
+                Description = genreDTO.Description
             };
         }
     }

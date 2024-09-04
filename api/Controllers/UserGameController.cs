@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.User;
+using api.Dtos.UserGame;
 using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -20,11 +23,15 @@ namespace api.Controllers
         private readonly IUserRepository _userRepo;
         private readonly IGameRepository _gameRepo;
         private readonly IUserGameRepository _userGameRepo;
-        public UserGameController( IUserRepository userRepo, IGameRepository gameRepo, IUserGameRepository userGameRepo)
+        private readonly UserManager<User> _userManager; 
+        private readonly SignInManager<User> _signInManager;
+        public UserGameController( IUserRepository userRepo, IGameRepository gameRepo, IUserGameRepository userGameRepo, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userRepo = userRepo;
             _gameRepo = gameRepo;
             _userGameRepo = userGameRepo;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet("{id}")]
@@ -36,20 +43,38 @@ namespace api.Controllers
             var userGames = await _userGameRepo.GetUserGames(appUser);
             return Ok(userGames);
         }
-    
-        [HttpPost("{gameId}")]
-        [Authorize]
-        public async Task<IActionResult> Create([FromBody] int userId, int gameId)
+
+        [HttpGet]
+        
+        public async Task<IActionResult> GetOneUsersManyGames()
         {
-            var user = await _userRepo.GetByIdAsync(userId);
-            var games = await _gameRepo.GetByIdAsync(gameId);
+            //Setup user Auth;
+            try
+            {
+                var currentUser = await _userManager.FindByEmailAsync(User.Identity.Name);
+                var userGames = await _userGameRepo.GetUserGames(currentUser);
+                return Ok(userGames);
+            }
+            catch
+            {
+                return BadRequest(error: "User not found");
+            }
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Create([FromBody] UserGameDTO userGame)
+        {
+            var user = await _userRepo.GetByIdAsync(userGame.UserId);
+            var games = await _gameRepo.GetByIdAsync(userGame.GameId);
 
             if (user == null || games == null)
             {
                 return NotFound();
             }
             var UserGameIsFilled = await _userGameRepo.GetUserGames(user);
-            if(UserGameIsFilled.Any(e => e.Id == gameId))
+            if(UserGameIsFilled.Any(e => e.Id == userGame.GameId))
             {
                 return BadRequest("Cannot add same game twice");
             }

@@ -16,6 +16,15 @@ namespace api.Repository
         {
             _context = context;
         }
+
+        public async Task<Genre> CreateAsync(Genre genre)
+        {
+            if (genre == null) return null;
+            await _context.Genres.AddAsync(genre);
+            await _context.SaveChangesAsync();
+            return genre;
+        }
+
         public async Task<Genre> DeleteAsync(int id)
         {
             var genre = await _context.Genres.FirstOrDefaultAsync(x =>x.Id == id);
@@ -29,9 +38,10 @@ namespace api.Repository
             return genre;
         }
 
-        public Task<Genre> GetByIdAync(int id)
+        public async Task<Genre?> GetByIdAync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Genres.FirstOrDefaultAsync(x => x.Id == id);
         }
+        
     }
 }

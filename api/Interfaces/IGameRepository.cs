@@ -11,5 +11,8 @@ namespace api.Interfaces
         Task<List<Game>> GetAllAsync();
         Task<Game?> GetByIdAsync(int id);
         Task<bool> GameExists(int id);
+        Task<Game> CreateAsync(Game game);
+        Task<Game?> UpdateAsync(int id, Game game);
+        Task<Game?> DeleteAsync(int id);
     }
 }
