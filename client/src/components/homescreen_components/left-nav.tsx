@@ -1,6 +1,6 @@
 import { Avatar, Button, FormControl, FormLabel, Grid, GridItem, Icon, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import { CiLogin, CiLogout } from "react-icons/ci";
-export default function LeftNav() {
+export default function LeftNav({setBool} :any) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     function addGame(e : any) {
         e.preventDefault();

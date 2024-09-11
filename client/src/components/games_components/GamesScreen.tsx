@@ -22,24 +22,20 @@ export default function GamesScreen() {
         "Content-Type": "application/json-patch+json",
       },
       body: JSON.stringify({
-        name: e.target[0].value,
-        description: e.target[1].value,
-        price: e.target[2].value
+        Name: e.target[0].value,
+        Description: e.target[1].value,
+        Price: parseInt(e.target[2].value)
       }),
     })
-    .then((r) => r.json())
-    .then((data) => {
-        setBool(true)
-    })
+    .then((r) => setBool(!bool))
   }
   function deleteGame(id: any) {
     fetch(`/api/game/${id}`, {
       method: "DELETE"
     })
-    .then((r) => r.json())
-    .then((data) => {
-        setBool(true)
-    })
+    .then(r => setBool(!bool))
+    console.log("bool")
+    setBool(!bool)
   }
 
 
@@ -66,7 +62,7 @@ export default function GamesScreen() {
                   <ModalHeader>Edit Menu</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
-                  <form>
+                  <form onSubmit={(e) => {editGame(e, game.id) }}>
                         <FormControl>
                             <FormLabel>Name of Game</FormLabel>
                             <Input type="text" placeholder="Name" />
@@ -75,8 +71,8 @@ export default function GamesScreen() {
                             <FormLabel>Price</FormLabel>
                             <Input type="number" placeholder="Enter your password" />
                         </FormControl>
-                        <Button onSubmit={(e) => {editGame(game.id, e) }} type="submit" colorScheme="blue" padding={5} margin={5}>Edit</Button>
-                    </form>
+                        <Button type="submit" colorScheme="blue" padding={5} margin={5}>Edit</Button>
+                    </form >
                   </ModalBody>
                   <ModalFooter>
                     <Button onClick={onClose}>Close</Button>
