@@ -74,7 +74,7 @@ namespace api.Controllers
                 return NotFound();
             }
             var UserGameIsFilled = await _userGameRepo.GetUserGames(user);
-            if(UserGameIsFilled.Any(e => e.Id == userGame.GameId))
+            if(UserGameIsFilled.Any(e => e.Id == games.Id))
             {
                 return BadRequest("Cannot add same game twice");
             }
