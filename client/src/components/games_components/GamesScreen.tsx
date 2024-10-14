@@ -24,7 +24,8 @@ export default function GamesScreen() {
       body: JSON.stringify({
         Name: e.target[0].value,
         Description: e.target[1].value,
-        Price: parseInt(e.target[2].value)
+        ImageLink: e.target[2].value,
+        Price: parseInt(e.target[3].value)
       }),
     })
     .then((r) => setBool(!bool))
@@ -43,7 +44,7 @@ export default function GamesScreen() {
     return (
         <GridItem key={game.id} pl={2} bg="white" padding={3} margin={3}>
           <Box maxW={"sm"} bg={"#f9f9f9"} borderWidth={1} borderRadius="lg" overflow="hidden">
-            <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn0qsJQm09tIMfegVz2-tRYWd8_Hs8zywfCQ&s" alt={game.name} />
+            <Image key={game.id} src={game.imageLink} alt={game.name} fit={"cover"}/>
             <Box p="6">
               <Box
                 mt="1"
@@ -59,7 +60,7 @@ export default function GamesScreen() {
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>Edit Menu</ModalHeader>
+                  <ModalHeader>Edit</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
                   <form onSubmit={(e) => {editGame(e, game.id) }}>
@@ -67,6 +68,8 @@ export default function GamesScreen() {
                             <FormLabel>Name of Game</FormLabel>
                             <Input type="text" placeholder="Name" />
                             <FormLabel>Description</FormLabel>
+                            <Input type="text" placeholder="Description" />
+                            <FormLabel>Image Link</FormLabel>
                             <Input type="text" placeholder="Description" />
                             <FormLabel>Price</FormLabel>
                             <Input type="number" placeholder="Enter your password" />

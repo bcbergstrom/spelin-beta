@@ -13,7 +13,8 @@ export default function LeftNav({setBool} :any) {
             body: JSON.stringify({
                 name: e.target[0].value,
                 description: e.target[1].value,
-                price: e.target[2].value
+                imageLink: e.target[2].value,
+                price: e.target[3].value
             }),
         })
         .then((r) => r.json())
@@ -58,6 +59,8 @@ export default function LeftNav({setBool} :any) {
                             <Input type="text" placeholder="Name" />
                             <FormLabel>Description</FormLabel>
                             <Input type="text" placeholder="Description" />
+                            <FormLabel>Image Link</FormLabel>
+                            <Input type="text" placeholder="Name" />
                             <FormLabel>Price</FormLabel>
                             <Input type="number" placeholder="Enter your password" />
                         </FormControl>

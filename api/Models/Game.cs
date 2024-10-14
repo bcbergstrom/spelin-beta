@@ -13,7 +13,7 @@ namespace api.Models
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        [Column(TypeName = "decimal(18,2)")]
+        public string ImageLink { get; set; } = string.Empty;
         public decimal Price { get; set; }
 
         //Relationships

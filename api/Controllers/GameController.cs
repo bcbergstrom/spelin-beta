@@ -50,7 +50,6 @@ namespace api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateGameRequestDTO gameDTO)
         {
-            Console.WriteLine("hitting put");
             var game = await _gameRepo.GetByIdAsync(id);
             if (game == null)
             {
@@ -65,7 +64,6 @@ namespace api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            Console.WriteLine("hitting delete");
             var game = await _gameRepo.GetByIdAsync(id);
             if (game == null)
             {

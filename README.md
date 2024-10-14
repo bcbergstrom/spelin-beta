@@ -19,3 +19,12 @@ MIT
 ## Contributing
 
 You may contribute by forking and adding to the fork, or contacting me through email or linkedin (both found on my profile)
+
+# How to install/use
+
+## Backend
+
+Using .Net core for the backend, run the .net core app with the following command in the api folder:
+``dotnet watch run``
+Then navigate to the client folder and run the Vite app:
+``npm run dev``
