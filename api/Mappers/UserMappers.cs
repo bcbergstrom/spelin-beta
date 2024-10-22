@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Game;
+using api.Dtos.ReviewDTO;
 using api.Dtos.User;
 using api.Models;
 
@@ -39,9 +40,18 @@ namespace api.Mappers
             return new LoginDTO
             {
                 Name = user.Name ?? string.Empty,
-                Email = user.Email ?? string.Empty,
                 Password = user.Password ?? string.Empty
             };
+        }
+        public static ToUserReviewDTO ToUserReviewDTO(this Review review, User user)
+        {
+            return new ToUserReviewDTO
+            {
+                Username = user.UserName ?? string.Empty,
+                Description = review.Description,
+                Rating = review.Rating,
+            };
+
         }
     }
 }

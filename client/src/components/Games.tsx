@@ -3,7 +3,7 @@ import LeftNav from "./homescreen_components/left-nav";
 import GamesScreen from "./games_components/GamesScreen";
 import Breadcrum from "./homescreen_components/breadcrum";
 
-export default function Games() {
+export default function Games({reviewGame, setReviewGame}:any) {
   return (
     <Grid
       templateAreas={`"nav main"
@@ -18,7 +18,7 @@ export default function Games() {
       fontWeight="bold"
     >
         <LeftNav/>
-        <GamesScreen/>
+        <GamesScreen setReviewGame={setReviewGame}/>
         <Breadcrum/>
     </Grid>
   );

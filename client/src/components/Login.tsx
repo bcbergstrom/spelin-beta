@@ -13,19 +13,20 @@ export default function Login({setUser, user} : any) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                Email: e.target[0].value,
+                Name: e.target[0].value,
                 Password: e.target[1].value
             }),
         })
         .then((r) => r.json())
         .then((data) => {
-            if (data.error) {
-                alert(data.error)
-                setUser(e.target[0].value)
-            } else {
-                setUser(e.target[0].value)
+            if (data.status == 404) {
+                alert("User not found")
+            } else if (data.name != undefined && data.password != undefined) {
+                setUser(data)
+                navigate("/games")
+            } else{
+                alert("Invalid Sign-In")
             }
-            navigate("/")
         })
         .catch((err) => alert(err));
     }
@@ -44,15 +45,22 @@ export default function Login({setUser, user} : any) {
                 Password: e.target[2].value
             }),
         })
-        .then((r) => r.json())
+        .then((r) => {
+            console.log(r)
+            return r.json()
+
+        })
         .then((data) => {
-            if (data.error) {
-                alert(data.error)
-                setUser(e.target[0].value)
-            } else {
-                setUser(e.target[0].value)
+            if (data.status == 404) {
+                alert("Registration Failed - Password is too short")
             }
-            navigate("/")
+            else if (data.errors != undefined) {
+                alert("Registration Failed - " + data.errors[0].description)
+            }
+            else {
+                setUser(data)
+                navigate("/games")
+            }
     })
     .catch((err) => alert(err));
 }
@@ -67,7 +75,7 @@ export default function Login({setUser, user} : any) {
                 <ModalHeader>Register</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <form>
+                    <form onSubmit={(e) => {register(e) }}>
                         <FormControl>
                             <FormLabel>Name</FormLabel>
                             <Input type="text" placeholder="Enter your name" />
@@ -76,7 +84,7 @@ export default function Login({setUser, user} : any) {
                             <FormLabel>Password</FormLabel>
                             <Input type="password" placeholder="Enter your password" />
                         </FormControl>
-                        <Button onSubmit={(e) => {register(e) }} type="submit" colorScheme="blue" padding={5} margin={5}>Register</Button>
+                        <Button  type="submit" colorScheme="blue" padding={5} margin={5}>Register</Button>
                     </form>
                 </ModalBody>
                 <ModalFooter>
@@ -96,8 +104,8 @@ export default function Login({setUser, user} : any) {
             <GridItem bg={"#f9f9f9"}   textAlign={"center"} p={4}>
                 <form onSubmit={(e) => {login(e) }}>
                 <FormControl>
-                    <FormLabel>Email address</FormLabel>
-                    <Input type="email" placeholder="Enter your email" />
+                    <FormLabel>User Name</FormLabel>
+                    <Input type="text" placeholder="Enter your Username" />
                     <FormLabel>Password</FormLabel>
                     <Input type="password" placeholder="Enter your password" />
                 </FormControl>

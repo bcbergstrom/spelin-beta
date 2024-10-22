@@ -4,9 +4,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 import Games from "./components/Games";
+import Reviews from "./components/Reviews";
 
 function App() {
   const [user, setUser]: [string, any]= useState("");
+  const [reviewGame, setReviewGame]: [object,any] = useState({});
   const router = createBrowserRouter([
     {
       path: "/",
@@ -19,12 +21,16 @@ function App() {
     },
     {
       path: "/games",
-      element:<Games/>,
+      element:<Games setReviewGame={setReviewGame}/>,
     },
     {
       path: "/login",
       element:<Login setUser={setUser} user={user} />
     },
+    {
+      path: "/reviews",
+      element: <Reviews reviewGame={reviewGame} user={user} />
+    }
   ])
   return (
     <>

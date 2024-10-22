@@ -52,39 +52,41 @@ namespace api.Controllers
             {
                 return NotFound();
             }
-            return Ok(user.ToUserDTO());
+            return Ok(user);
         }
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Create([FromBody] LoginDTO userDTO)
+        public async Task<IActionResult> Create([FromBody] CreateUserRequestDTO userDTO)
         {
-            if (ModelState.IsValid)
-            {
-                var user = new User {UserName = userDTO.Name, Email = userDTO.Email};
-                var result = await _userManager.CreateAsync(user, userDTO.Password);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return Ok();
-                }
-            }
 
-            return NotFound();
+            var user = new User {UserName = userDTO.Name, Email = userDTO.Email};
+            var result = await _userManager.CreateAsync(user, userDTO.Password);
+            Console.WriteLine(result);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, false);
+                return Ok(user.ToUserDTO());
+            } else {
+                return NotFound(result);
+            }
+            
+
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO userDTO)
         {
-        var result = await _signInManager.PasswordSignInAsync(userDTO.Email, userDTO.Password, false, false);        
+        var result = await _signInManager.PasswordSignInAsync(userDTO.Name, userDTO.Password, false, false);        
 
         if (result.Succeeded)
         {
-            return Ok();
+            var user = await _userManager.FindByNameAsync(userDTO.Name);
+            return Ok(user.ToUserDTO());
         }
         else
         {
-            return NotFound();
+            return NotFound(result);
         }
     }
         

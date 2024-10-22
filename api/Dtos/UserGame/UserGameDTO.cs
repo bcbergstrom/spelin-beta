@@ -9,5 +9,8 @@ namespace api.Dtos.UserGame
     {
         public int GameId { get; set; }
         public int UserId { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public int Rating { get; set; }
+
     }
 }

@@ -1,10 +1,12 @@
 import { Box, Button, Editable, EditablePreview, EditableTextarea, FormControl, FormLabel, Grid, GridItem, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
-export default function GamesScreen() {
+export default function GamesScreen({ setReviewGame}:any) {
   const [games, setGames] = useState([{}]);
   const [bool , setBool] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
   useEffect(() => {
     fetch("/api/game")
       .then((r) => r.json())
@@ -39,7 +41,11 @@ export default function GamesScreen() {
     setBool(!bool)
   }
 
-
+function viewReview(game: any) {
+  setReviewGame(game)
+  console.log(game)
+  navigate("/reviews")
+}
   const element = games.map((game: any) => {
     return (
         <GridItem key={game.id} pl={2} bg="white" padding={3} margin={3}>
@@ -56,7 +62,9 @@ export default function GamesScreen() {
                 {game.name}
               </Box>
               <Box>{game.description}</Box>
+              <Box> ${game.price}</Box>
               <Button colorScheme="blue" onClick={onOpen}>Edit Menu</Button>
+              <Button onClick={() => {viewReview(game)}}>Reviews</Button>
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

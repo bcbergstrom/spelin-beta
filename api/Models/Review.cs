@@ -12,6 +12,7 @@ namespace api.Models
         public DateTime Date { get; set; }
         public int UserId { get; set; }
         public int GameId { get; set; }
+        public int Rating { get; set; }
 
         public User User { get; set; } = null!;
         public List<Game> Games { get; set; } = []!;
